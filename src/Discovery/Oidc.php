@@ -22,7 +22,7 @@ use Okta\JwtVerifier\Discovery\DiscoveryMethod as Discovery;
 class Oidc extends Discovery
 {
 
-    protected $wellKnownUri = '/.well-known/openid-configuration';
+    protected string $wellKnownUri = '/.well-known/openid-configuration';
 
     /**
      * Get the defined well-known URI.  This is the URI

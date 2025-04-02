@@ -22,7 +22,7 @@ use Okta\JwtVerifier\Discovery\DiscoveryMethod as Discovery;
 class Oauth extends Discovery
 {
 
-    protected $wellKnownUri = '/.well-known/oauth-authorization-server';
+    protected string $wellKnownUri = '/.well-known/oauth-authorization-server';
 
     /**
      * Get the defined well-known URI.  This is the URI

@@ -19,7 +19,6 @@ namespace Okta\JwtVerifier\Adaptors;
 
 use Carbon\Carbon;
 use Firebase\JWT\JWT as FirebaseJWT;
-use Illuminate\Cache\ArrayStore;
 use Firebase\JWT\Key;
 use Okta\JwtVerifier\Jwt;
 use Okta\JwtVerifier\Request;
@@ -28,26 +27,16 @@ use UnexpectedValueException;
 
 class FirebasePhpJwt implements Adaptor
 {
-    /**
-     * @var Request
-     */
-    private $request;
+    private Request $request;
 
-    /**
-     * Leeway in seconds
-     *
-     * @var int
-     */
-    private $leeway;
-
-    public function __construct(Request $request = null, int $leeway = 120, CacheInterface $cache = null)
-    {
+    public function __construct(
+        private readonly CacheInterface $cache,
+        ?Request $request = null,
+    ) {
         $this->request = $request ?: new Request();
-        $this->leeway = $leeway ?: 120;
-        $this->cache = $cache ?: new \Illuminate\Cache\Repository(new ArrayStore(true));
     }
 
-    public function clearCache(string $jku)
+    public function clearCache(string $jku): bool
     {
         $cacheKey = 'keys-' . md5($jku);
         return $this->cache->delete($cacheKey);
@@ -81,17 +70,19 @@ class FirebasePhpJwt implements Adaptor
         return (new Jwt($jwt, $decoded));
     }
 
-    public static function isPackageAvailable()
+    public static function isPackageAvailable(): bool
     {
         return class_exists(FirebaseJWT::class);
     }
 
     /**
      * Parse a set of JWK keys
+     *
      * @param $source
+     *
      * @return array an associative array represents the set of keys
      */
-    public static function parseKeySet($source)
+    public static function parseKeySet($source): array
     {
         $keys = [];
         if (is_string($source)) {
@@ -132,7 +123,9 @@ class FirebasePhpJwt implements Adaptor
 
     /**
      * Parse a JWK key
+     *
      * @param $source
+     *
      * @return resource|array an associative array represents the key
      */
     public static function parseKey($source)
@@ -168,18 +161,19 @@ class FirebasePhpJwt implements Adaptor
      *
      * @param string $n the RSA modulus encoded in Base64
      * @param string $e the RSA exponent encoded in Base64
+     *
      * @return string the RSA public key represented in PEM format
      */
-    private static function createPemFromModulusAndExponent($n, $e)
+    private static function createPemFromModulusAndExponent($n, $e): string
     {
         $modulus = FirebaseJWT::urlsafeB64Decode($n);
         $publicExponent = FirebaseJWT::urlsafeB64Decode($e);
 
 
-        $components = array(
+        $components = [
             'modulus' => pack('Ca*a*', 2, self::encodeLength(strlen($modulus)), $modulus),
-            'publicExponent' => pack('Ca*a*', 2, self::encodeLength(strlen($publicExponent)), $publicExponent)
-        );
+            'publicExponent' => pack('Ca*a*', 2, self::encodeLength(strlen($publicExponent)), $publicExponent),
+        ];
 
         $RSAPublicKey = pack(
             'Ca*a*a*',
@@ -217,10 +211,12 @@ class FirebasePhpJwt implements Adaptor
      * for more information.
      *
      * @access private
+     *
      * @param int $length
+     *
      * @return string
      */
-    private static function encodeLength($length)
+    private static function encodeLength($length): string
     {
         if ($length <= 0x7F) {
             return chr($length);

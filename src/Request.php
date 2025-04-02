@@ -60,7 +60,7 @@ class Request
         $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
     }
 
-    public function setUrl($url): Request
+    public function setUrl(string $url): Request
     {
         $this->url = $this->uriFactory->createUri($url);
         return $this;
