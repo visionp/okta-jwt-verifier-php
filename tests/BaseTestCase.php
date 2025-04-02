@@ -16,6 +16,7 @@
  ******************************************************************************/
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 
 class BaseTestCase extends TestCase
 {
@@ -28,6 +29,6 @@ class BaseTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->response = self::createMock('Psr\Http\Message\ResponseInterface');
+        $this->response = self::createMock(ResponseInterface::class);
     }
 }
