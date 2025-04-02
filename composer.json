@@ -25,7 +25,8 @@
         "php-http/curl-client": "^2.1",
         "bretterer/iso_duration_converter": "^0.1.0",
         "firebase/php-jwt": "^6.1",
-        "ext-json": "*"
+        "ext-json": "*",
+        "psr/simple-cache": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",

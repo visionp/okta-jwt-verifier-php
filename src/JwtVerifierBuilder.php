@@ -17,7 +17,6 @@
 
 namespace Okta\JwtVerifier;
 
-use Okta\JwtVerifier\Discovery\Oauth;
 use Okta\JwtVerifier\Adaptors\Adaptor;
 use Okta\JwtVerifier\Discovery\DiscoveryMethod;
 use Bretterer\IsoDurationConverter\DurationParser;

@@ -18,12 +18,12 @@
 namespace Okta\JwtVerifier;
 
 use Http\Client\Common\PluginClient;
-use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\UriFactoryDiscovery;
 use Http\Message\MessageFactory;
-use Http\Message\UriFactory;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -48,8 +48,8 @@ class Request
     protected $query = [];
 
     public function __construct(
-        HttpClient $httpClient = null,
-        UriFactory $uriFactory = null,
+        ClientInterface $httpClient = null,
+        Psr17FactoryDiscovery $uriFactory = null,
         MessageFactory $messageFactory = null
     ) {
         $this->httpClient = new PluginClient(

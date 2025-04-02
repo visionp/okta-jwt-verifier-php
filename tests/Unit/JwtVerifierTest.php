@@ -15,11 +15,15 @@
  * limitations under the License.                                             *
  ******************************************************************************/
 
+use Http\Mock\Client;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Okta\JwtVerifier\Adaptors\FirebasePhpJwt;
 use Okta\JwtVerifier\JwtVerifier;
+use Okta\JwtVerifier\Request;
 
 class JwtVerifierTest extends BaseTestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use MockeryPHPUnitIntegration;
 
     /** @test */
     public function can_get_issuer_off_object()
@@ -29,14 +33,14 @@ class JwtVerifierTest extends BaseTestCase
             ->willreturn('{"issuer": "https://example.com"}');
 
 
-        $httpClient = new \Http\Mock\Client;
+        $httpClient = new Client;
         $httpClient->addResponse($this->response);
-        $request = new \Okta\JwtVerifier\Request($httpClient);
+        $request = new Request($httpClient);
 
         $verifier = new JwtVerifier(
             'https://my.issuer.com',
             new \Okta\JwtVerifier\Discovery\Oauth(),
-            new \Okta\JwtVerifier\Adaptors\FirebasePhpJwt(),
+            new FirebasePhpJwt(),
             $request
         );
 
@@ -55,14 +59,14 @@ class JwtVerifierTest extends BaseTestCase
             ->willreturn('{"issuer": "https://example.com"}');
 
 
-        $httpClient = new \Http\Mock\Client;
+        $httpClient = new Client;
         $httpClient->addResponse($this->response);
-        $request = new \Okta\JwtVerifier\Request($httpClient);
+        $request = new Request($httpClient);
 
         $verifier = new JwtVerifier(
             'https://my.issuer.com',
             new \Okta\JwtVerifier\Discovery\Oauth(),
-            new \Okta\JwtVerifier\Adaptors\FirebasePhpJwt(),
+            new FirebasePhpJwt(),
             $request
         );
 
@@ -81,14 +85,14 @@ class JwtVerifierTest extends BaseTestCase
             ->willreturn('{"issuer": "https://example.com"}');
 
 
-        $httpClient = new \Http\Mock\Client;
+        $httpClient = new Client;
         $httpClient->addResponse($this->response);
-        $request = new \Okta\JwtVerifier\Request($httpClient);
+        $request = new Request($httpClient);
 
         $verifier = new JwtVerifier(
             'https://my.issuer.com',
             new \Okta\JwtVerifier\Discovery\Oauth(),
-            new \Okta\JwtVerifier\Adaptors\FirebasePhpJwt(),
+            new FirebasePhpJwt(),
             $request
         );
 
@@ -107,7 +111,7 @@ class JwtVerifierTest extends BaseTestCase
         $fakeClient = Mockery::mock(Okta\JwtVerifier\Request::class);
         $fakeClient->expects('setUrl->get')->never();
 
-        $verifier = new Okta\JwtVerifier\JwtVerifier('https://my.issuer.com', null, null, $fakeClient);
+        new Okta\JwtVerifier\JwtVerifier('https://my.issuer.com', null, null, $fakeClient);
     }
 
     public function test_generated_keys_uri_correct()
@@ -119,7 +123,7 @@ class JwtVerifierTest extends BaseTestCase
 
     public function test_keys_cached()
     {
-        $fakeRequest = Mockery::mock(\Okta\JwtVerifier\Request::class);
+        $fakeRequest = Mockery::mock(Request::class);
         $expected    = [
             'keys' => [[
                'kty' => 'RSA',
@@ -132,7 +136,7 @@ class JwtVerifierTest extends BaseTestCase
         ];
 
         $fakeRequest->expects('setUrl->get->getBody->getContents')->andReturn(json_encode($expected))->times(1);
-        $adaptor = new \Okta\JwtVerifier\Adaptors\FirebasePhpJwt($fakeRequest);
+        $adaptor = new FirebasePhpJwt($fakeRequest);
 
         $adaptor->getKeys('abc');
         $adaptor->getKeys('abc');
