@@ -164,7 +164,7 @@ class FirebasePhpJwt implements Adaptor
      *
      * @return string the RSA public key represented in PEM format
      */
-    private static function createPemFromModulusAndExponent($n, $e): string
+    private static function createPemFromModulusAndExponent(string $n, string $e): string
     {
         $modulus = FirebaseJWT::urlsafeB64Decode($n);
         $publicExponent = FirebaseJWT::urlsafeB64Decode($e);
@@ -216,7 +216,7 @@ class FirebasePhpJwt implements Adaptor
      *
      * @return string
      */
-    private static function encodeLength($length): string
+    private static function encodeLength(int $length): string
     {
         if ($length <= 0x7F) {
             return chr($length);

@@ -26,7 +26,8 @@
         "bretterer/iso_duration_converter": "^0.1.0",
         "firebase/php-jwt": "^6.1",
         "ext-json": "*",
-        "psr/simple-cache": "^3.0"
+        "psr/simple-cache": "^3.0",
+      "ext-openssl": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
